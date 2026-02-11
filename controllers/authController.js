@@ -5,37 +5,57 @@ const JWT = require("jsonwebtoken");
 // REGISTER CONTROLLER
 const registerController = async (req, res) => {
   try {
-    const { userName, email, password, phoneNumber, address, userType } =
-      req.body;
+    const {
+      userName,
+      email,
+      password,
+      phoneNumber,
+      address,
+      userType,
+      answer,
+    } = req.body;
 
-    // basic validation
-    if (!userName || !email || !password || !phoneNumber || !userType) {
+    // 1️⃣ Validation
+    if (!userName || !email || !password || !phoneNumber) {
       return res.status(400).json({
         success: false,
-        message: "Please provide all the required fields.",
+        message: "Please provide all required fields.",
       });
     }
 
-    // check if user already exists
+    // 2️⃣ Check existing user
     const existingUser = await pool.query(
-      "SELECT * FROM users WHERE email = $1",
+      "SELECT user_id FROM users WHERE email = $1",
       [email],
     );
+
     if (existingUser.rows.length > 0) {
       return res.status(400).json({
         success: false,
-        message: "Email already exists, please login.",
+        message: "Email already exists.",
       });
     }
-    // password hashing (encryption)
-    var salt = bcrypt.genSaltSync(10);
+
+    // 3️⃣ Hash password
+    const salt = bcrypt.genSaltSync(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // insert new user (password stored as plain text for now)
+    // 4️⃣ Insert user
     await pool.query(
-      `INSERT INTO users (username, email, password, phoneNumber, address, userType)
-       VALUES ($1, $2, $3, $4, $5, $6)`,
-      [userName, email, hashedPassword, phoneNumber, address, userType],
+      `
+      INSERT INTO users
+      (username, email, password, phonenumber, address, usertype, answer)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      `,
+      [
+        userName,
+        email,
+        hashedPassword,
+        phoneNumber,
+        address,
+        userType || "Client",
+        answer || "HappyAnswer",
+      ],
     );
 
     res.status(201).json({
@@ -43,14 +63,14 @@ const registerController = async (req, res) => {
       message: "Successfully Registered.",
     });
   } catch (error) {
-    console.error("Error in register API:", error.message);
-    console.error("Full error:", error);
+    console.error("Error in register API:", error);
     res.status(500).json({
       success: false,
       message: "Server error. Please try again later.",
     });
   }
 };
+
 //LOGIN CONTROLLER
 
 const loginController = async (req, res) => {
@@ -90,7 +110,7 @@ const loginController = async (req, res) => {
       });
     }
 
-    // token
+    // token generation before logging in..
     const token = JWT.sign({ id: user.user_id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
