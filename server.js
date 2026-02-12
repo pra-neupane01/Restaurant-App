@@ -4,6 +4,8 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const { userSchema } = require("./models/userSchema");
 const { restaurantSchema } = require("./models/restaurantModel");
+const { categorySchema } = require("./models/categoryModel");
+const { foodSchema } = require("./models/foodModel");
 
 dotenv.config();
 
@@ -17,6 +19,8 @@ app.use("/api/v1/test", require("./routes/testRoute"));
 app.use("/api/v1/auth", require("./routes/authRoute"));
 app.use("/api/v1/user", require("./routes/userRoute"));
 app.use("/api/v1/restaurant", require("./routes/restaurantRoute"));
+app.use("/api/v1/category", require("./routes/categoryRoute"));
+app.use("/api/v1/food", require("./routes/foodRoute"));
 
 app.get("/", (req, res) => {
   res.status(200).send("Server is running");
@@ -28,6 +32,8 @@ const initializeDatabase = async () => {
   try {
     await userSchema();
     await restaurantSchema();
+    await categorySchema();
+    await foodSchema();
 
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

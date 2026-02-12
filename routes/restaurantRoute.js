@@ -12,4 +12,23 @@ router.post(
   restaurantControllerModule.createRestaurantContoller,
 );
 
+// GET all restaurant info
+router.get(
+  "/getallrestaurant",
+  restaurantControllerModule.getAllRestaurantController,
+);
+
+// GET specific restaurant info
+router.get(
+  "/getrestaurantbyid/:restaurantId",
+  restaurantControllerModule.getRestaurantByIdController,
+);
+
+//DELETE Restaurant :ON THE BASIS OF ID provided
+router.delete(
+  "/deleterestaurant/:restaurantId",
+  authMiddleware,
+  restaurantControllerModule.deleteRestaurantController,
+);
+
 module.exports = router;

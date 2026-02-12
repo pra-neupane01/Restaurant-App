@@ -1,10 +1,5 @@
 const pool = require("../config/db");
 
-/*
-This model ensures the foods table exists.
-It contains: id, name, description, price, category, created_at
-*/
-
 const userSchema = async () => {
   const query = `
 CREATE TABLE IF NOT EXISTS users (
