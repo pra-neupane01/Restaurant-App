@@ -19,7 +19,7 @@ const createCategoryController = async (req, res) => {
       });
     }
 
-    await pool.query(
+    const categoryResult = await pool.query(
       `
       INSERT INTO category(category_title, image_url)
       VALUES($1, $2)
@@ -30,6 +30,7 @@ const createCategoryController = async (req, res) => {
     res.status(201).send({
       success: true,
       message: "Category Created successfully.",
+      category: categoryResult.rows,
     });
   } catch (error) {
     console.log(error);

@@ -6,6 +6,7 @@ const { userSchema } = require("./models/userSchema");
 const { restaurantSchema } = require("./models/restaurantModel");
 const { categorySchema } = require("./models/categoryModel");
 const { foodSchema } = require("./models/foodModel");
+const { orderSchema } = require("./models/orderModel");
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use("/api/v1/user", require("./routes/userRoute"));
 app.use("/api/v1/restaurant", require("./routes/restaurantRoute"));
 app.use("/api/v1/category", require("./routes/categoryRoute"));
 app.use("/api/v1/food", require("./routes/foodRoute"));
+app.use("/api/v1/order", require("./routes/orderRoute"));
 
 app.get("/", (req, res) => {
   res.status(200).send("Server is running");
@@ -34,6 +36,7 @@ const initializeDatabase = async () => {
     await restaurantSchema();
     await categorySchema();
     await foodSchema();
+    await orderSchema();
 
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
