@@ -95,9 +95,9 @@ const updateUserController = async (req, res) => {
        If frontend sends new value → use it
        Else → keep old value
     ------------------------------------------------ */
-    const finalUserName = userName || currentUser.username;
-    const finalAddress = address || currentUser.address;
-    const finalPhoneNumber = phoneNumber || currentUser.phonenumber;
+    const finalUserName = userName ?? currentUser.username;
+    const finalAddress = address ?? currentUser.address;
+    const finalPhoneNumber = phoneNumber ?? currentUser.phonenumber;
 
     /* ------------------------------------------------
        STEP 5: Update user in database

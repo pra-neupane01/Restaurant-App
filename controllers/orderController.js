@@ -48,4 +48,58 @@ const placeOrderController = async (req, res) => {
   }
 };
 
-module.exports = { placeOrderController };
+// CHANGE ORDER STATUS
+const orderstatusController = async (req, res) => {
+  try {
+    const orderId = req.params.orderId;
+
+    if (!orderId) {
+      return res.status(400).send({
+        success: false,
+        message: "Please provide order id.",
+      });
+    }
+
+    const { order_status } = req.body;
+
+    const existingOrder = await pool.query(
+      `SELECT * FROM orders WHERE order_id = $1`,
+      [orderId],
+    );
+
+    if (existingOrder.rows.length === 0) {
+      return res.status(404).send({
+        success: false,
+        message: "Order Not Found.",
+      });
+    }
+
+    const currentOrder = existingOrder.rows[0];
+
+    // If not provided, keep old status
+    const finalOrderStatus = order_status ?? currentOrder.order_status;
+
+    const updatedOrder = await pool.query(
+      `UPDATE orders 
+       SET order_status = $1 
+       WHERE order_id = $2 
+       RETURNING *`,
+      [finalOrderStatus, orderId],
+    );
+
+    res.status(200).send({
+      success: true,
+      message: "Order Status Updated.",
+      order: updatedOrder.rows[0],
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error in Order Status API.",
+      error,
+    });
+  }
+};
+
+module.exports = { placeOrderController, orderstatusController };
