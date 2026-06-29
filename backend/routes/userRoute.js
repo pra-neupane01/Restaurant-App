@@ -17,7 +17,6 @@ router.put(
 
 router.post(
   "/resetpassword",
-  authMiddleware,
   userControllerModule.resetPasswordController,
 );
 
