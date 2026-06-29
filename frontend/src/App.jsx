@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import Layout from './components/Layout';
+import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ResetPassword from './pages/ResetPassword';
@@ -10,6 +11,8 @@ import Restaurants from './pages/Restaurants';
 import RestaurantDetail from './pages/RestaurantDetail';
 import Foods from './pages/Foods';
 import Categories from './pages/Categories';
+import Cart from './pages/Cart';
+import Profile from './pages/Profile';
 
 export default function App() {
   return (
@@ -26,6 +29,15 @@ export default function App() {
               <Route path="restaurants/:id" element={<RestaurantDetail />} />
               <Route path="foods" element={<Foods />} />
               <Route path="categories" element={<Categories />} />
+              <Route path="cart" element={<Cart />} />
+              <Route
+                path="profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
             </Route>
           </Routes>
         </CartProvider>
