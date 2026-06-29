@@ -1,24 +1,12 @@
 {
   "name": "food-app",
   "version": "1.0.0",
-  "description": "This is a complete node js based CRUD app for restaurant. ",
-  "license": "ISC",
-  "author": "praladNeupane",
-  "type": "commonjs",
-  "main": "server.js",
+  "private": true,
+  "description": "Restaurant Food App — full-stack monorepo",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon server.js"
-  },
-  "dependencies": {
-    "bcryptjs": "^3.0.3",
-    "colors": "^1.4.0",
-    "cors": "^2.8.6",
-    "dotenv": "^17.2.3",
-    "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3",
-    "morgan": "^1.10.1",
-    "nodemon": "^3.1.11",
-    "pg": "^8.11.0"
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "dev:backend": "npm run server --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "build:frontend": "npm run build --prefix frontend"
   }
 }

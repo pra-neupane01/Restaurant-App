@@ -93,12 +93,6 @@ const getRestaurantByIdController = async (req, res) => {
   try {
     const restaurantId = req.params.restaurantId;
 
-    if (!restaurantId) {
-      return res.status(404).send({
-        success: false,
-        message: "Please provide Restaurant ID",
-      });
-    }
     const restaurants = await pool.query(
       `SELECT * FROM restaurant WHERE restaurant_code = $1`,
       [restaurantId],
